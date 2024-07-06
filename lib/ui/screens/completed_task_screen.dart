@@ -55,10 +55,10 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
       setState(() {});
     }
     NetworkResponse response =
-        await NetworkCaller.getRequest(Urls.completedTasks);
+    await NetworkCaller.getRequest(Urls.completedTasks);
     if (response.isSuccess) {
       TaskListWrapperModel taskListWrapperModel =
-          TaskListWrapperModel.fromJson(response.responseData);
+      TaskListWrapperModel.fromJson(response.responseData);
       completedTasks = taskListWrapperModel.taskList ?? [];
     } else {
       if (mounted) {

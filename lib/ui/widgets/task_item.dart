@@ -22,7 +22,7 @@ class TaskItem extends StatefulWidget {
 
 class _TaskItemState extends State<TaskItem> {
   bool _deleteInProgress = false;
-  final bool _editInProgress = false;
+  bool _editInProgress = false;
   String dropdownValue = '';
   List<String> statusList = ['New', 'Progress', 'Completed', 'Cancelled'];
 
@@ -56,7 +56,7 @@ class _TaskItemState extends State<TaskItem> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 ),
                 ButtonBar(
                   children: [
@@ -76,10 +76,7 @@ class _TaskItemState extends State<TaskItem> {
                       child: PopupMenuButton<String>(
                         icon: const Icon(Icons.edit),
                         onSelected: (String selectedValue) {
-                          dropdownValue = selectedValue;
-                          if (mounted) {
-                            setState(() {});
-                          }
+                          _updateTaskStatus(selectedValue);
                         },
                         itemBuilder: (BuildContext context) {
                           return statusList.map((String value) {
@@ -106,6 +103,48 @@ class _TaskItemState extends State<TaskItem> {
     );
   }
 
+  Future<void> _updateTaskStatus(String status) async {
+    setState(() {
+      _editInProgress = true;
+    });
+
+    NetworkResponse response;
+    if (status == 'Progress') {
+      response = await NetworkCaller.getRequest(
+        Urls.progressStatus(widget.taskModel.sId!),
+      );
+    } else if (status == 'Completed') {
+      response = await NetworkCaller.getRequest(
+        Urls.completedStatus(widget.taskModel.sId!),
+      );
+    } else if (status == 'Cancelled') {
+      response = await NetworkCaller.getRequest(
+        Urls.cancelledStatus(widget.taskModel.sId!),
+      );
+    } else {
+      return;
+    }
+
+    if (response.isSuccess) {
+      setState(() {
+        dropdownValue = status;
+        widget.taskModel.status = status;
+        widget.onUpdateTask();
+      });
+    } else {
+      if (mounted) {
+        showSnackBarMessage(
+          context,
+          response.errorMessage ?? 'Update task status failed! Try again',
+        );
+      }
+    }
+
+    setState(() {
+      _editInProgress = false;
+    });
+  }
+
   Future<void> _deleteTask() async {
     _deleteInProgress = true;
     if (mounted) {
@@ -121,7 +160,7 @@ class _TaskItemState extends State<TaskItem> {
       if (mounted) {
         showSnackBarMessage(
           context,
-          response.errorMessage ?? 'Get task count by status failed! Try again',
+          response.errorMessage ?? 'Delete task failed! Try again',
         );
       }
     }
