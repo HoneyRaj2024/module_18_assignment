@@ -30,116 +30,117 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: BackgroundWidget(
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 100),
-                    Text(
-                      'Join With Us',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 24),
-                    TextFormField(
-                      controller: _emailTEController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(hintText: 'Email'),
-                      validator: (String? value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return 'Enter your email address';
-                        }
-                        if (AppConstants.emailRegExp.hasMatch(value!) ==
-                            false) {
-                          return 'Enter a valid email address';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _firstNameTEController,
-                      decoration: const InputDecoration(hintText: 'First name'),
-                      validator: (String? value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return 'Enter your first name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _lastNameTEController,
-                      decoration: const InputDecoration(hintText: 'Last name'),
-                      validator: (String? value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return 'Enter your last name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _mobileTEController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(hintText: 'Mobile'),
-                      validator: (String? value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return 'Enter your mobile';
-                        }
-                        // if (AppConstants.mobileRegExp.hasMatch(value!) == false) {
-                        //   return 'Enter a valid phone number';
-                        // }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      obscureText: _showPassword == false,
-                      controller: _passwordTEController,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        suffixIcon: IconButton(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Join With Us',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 24),
+                      TextFormField(
+                        controller: _emailTEController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(hintText: 'Email'),
+                        validator: (String? value) {
+                          if (value?.trim().isEmpty ?? true) {
+                            return 'Enter your email address';
+                          }
+                          if (AppConstants.emailRegExp.hasMatch(value!) ==
+                              false) {
+                            return 'Enter a valid email address';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _firstNameTEController,
+                        decoration: const InputDecoration(hintText: 'First name'),
+                        validator: (String? value) {
+                          if (value?.trim().isEmpty ?? true) {
+                            return 'Enter your first name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _lastNameTEController,
+                        decoration: const InputDecoration(hintText: 'Last name'),
+                        validator: (String? value) {
+                          if (value?.trim().isEmpty ?? true) {
+                            return 'Enter your last name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _mobileTEController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(hintText: 'Mobile'),
+                        validator: (String? value) {
+                          if (value?.trim().isEmpty ?? true) {
+                            return 'Enter your mobile';
+                          }
+                          // if (AppConstants.mobileRegExp.hasMatch(value!) == false) {
+                          //   return 'Enter a valid phone number';
+                          // }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        obscureText: _showPassword == false,
+                        controller: _passwordTEController,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              _showPassword = !_showPassword;
+                              if (mounted) {
+                                setState(() {});
+                              }
+                            },
+                            icon: Icon(_showPassword
+                                ? Icons.remove_red_eye
+                                : Icons.visibility_off),
+                          ),
+                        ),
+                        validator: (String? value) {
+                          if (value?.trim().isEmpty ?? true) {
+                            return 'Enter your password';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Visibility(
+                        visible: _registrationInProgress == false,
+                        replacement: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        child: ElevatedButton(
                           onPressed: () {
-                            _showPassword = !_showPassword;
-                            if (mounted) {
-                              setState(() {});
+                            if (_formKey.currentState!.validate()) {
+                              _registerUser();
                             }
                           },
-                          icon: Icon(_showPassword
-                              ? Icons.remove_red_eye
-                              : Icons.visibility_off),
+                          child: const Icon(Icons.arrow_circle_right_outlined),
                         ),
                       ),
-                      validator: (String? value) {
-                        if (value?.trim().isEmpty ?? true) {
-                          return 'Enter your password';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Visibility(
-                      visible: _registrationInProgress == false,
-                      replacement: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _registerUser();
-                          }
-                        },
-                        child: const Icon(Icons.arrow_circle_right_outlined),
-                      ),
-                    ),
-                    const SizedBox(height: 36),
-                    _buildBackToSignInSection()
-                  ],
+                      const SizedBox(height: 36),
+                      _buildBackToSignInSection()
+                    ],
+                  ),
                 ),
               ),
             ),
