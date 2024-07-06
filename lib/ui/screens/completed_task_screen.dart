@@ -55,7 +55,7 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
       setState(() {});
     }
     NetworkResponse response =
-    await NetworkCaller.getRequest(Urls.completedTasks);
+    await NetworkCaller.getRequest(Urls.completedTask);
     if (response.isSuccess) {
       TaskListWrapperModel taskListWrapperModel =
       TaskListWrapperModel.fromJson(response.responseData);
@@ -63,7 +63,7 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
     } else {
       if (mounted) {
         showSnackBarMessage(
-            context, response.errorMessage ?? 'Get new task failed! Try again');
+            context, response.errorMessage ?? 'Get completed tasks failed! Try again');
       }
     }
     _getCompletedTasksInProgress = false;
