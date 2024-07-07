@@ -40,7 +40,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     _lastNameTEController.text = userData.lastName ?? '';
     _mobileTEController.text = userData.mobile ?? '';
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +104,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       ),
     );
   }
-
   Future<void> _updateProfile() async {
     _updateProfileInProgress = true;
     String encodePhoto = AuthController.userData?.photo ?? '';

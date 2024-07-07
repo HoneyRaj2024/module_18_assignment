@@ -10,7 +10,6 @@ import 'package:module_18_assignment/ui/widgets/task_item.dart';
 
 class CancelledTaskScreen extends StatefulWidget {
   const CancelledTaskScreen({super.key});
-
   @override
   State<CancelledTaskScreen> createState() => _CancelledTaskScreenState();
 }
@@ -18,7 +17,6 @@ class CancelledTaskScreen extends StatefulWidget {
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
   bool _getCancelledTasksInProgress = false;
   List<TaskModel> cancelledTasks = [];
-
   @override
   void initState() {
     super.initState();
@@ -55,15 +53,15 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
       setState(() {});
     }
     NetworkResponse response =
-    await NetworkCaller.getRequest(Urls.cancelledTasks);
+        await NetworkCaller.getRequest(Urls.cancelledTasks);
     if (response.isSuccess) {
       TaskListWrapperModel taskListWrapperModel =
-      TaskListWrapperModel.fromJson(response.responseData);
+          TaskListWrapperModel.fromJson(response.responseData);
       cancelledTasks = taskListWrapperModel.taskList ?? [];
     } else {
       if (mounted) {
-        showSnackBarMessage(
-            context, response.errorMessage ?? 'Get cancelled tasks failed! Try again');
+        showSnackBarMessage(context,
+            response.errorMessage ?? 'Get cancelled tasks failed! Try again');
       }
     }
     _getCancelledTasksInProgress = false;

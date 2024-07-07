@@ -10,7 +10,6 @@ import 'package:module_18_assignment/ui/widgets/task_item.dart';
 
 class InProgressTaskScreen extends StatefulWidget {
   const InProgressTaskScreen({super.key});
-
   @override
   State<InProgressTaskScreen> createState() => _InProgressTaskScreenState();
 }
@@ -18,7 +17,6 @@ class InProgressTaskScreen extends StatefulWidget {
 class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
   bool _getInProgressTasksInProgress = false;
   List<TaskModel> inProgressTasks = [];
-
   @override
   void initState() {
     super.initState();
@@ -55,15 +53,15 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
       setState(() {});
     }
     NetworkResponse response =
-    await NetworkCaller.getRequest(Urls.progressTasks);
+        await NetworkCaller.getRequest(Urls.progressTasks);
     if (response.isSuccess) {
       TaskListWrapperModel taskListWrapperModel =
-      TaskListWrapperModel.fromJson(response.responseData);
+          TaskListWrapperModel.fromJson(response.responseData);
       inProgressTasks = taskListWrapperModel.taskList ?? [];
     } else {
       if (mounted) {
-        showSnackBarMessage(
-            context, response.errorMessage ?? 'Get progress tasks failed! Try again');
+        showSnackBarMessage(context,
+            response.errorMessage ?? 'Get progress tasks failed! Try again');
       }
     }
     _getInProgressTasksInProgress = false;

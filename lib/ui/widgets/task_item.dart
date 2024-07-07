@@ -56,7 +56,7 @@ class _TaskItemState extends State<TaskItem> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 ),
                 ButtonBar(
                   children: [

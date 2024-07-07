@@ -8,7 +8,6 @@ import 'package:module_18_assignment/ui/widgets/background_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
-
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -22,7 +21,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _moveToNextScreen() async {
     await Future.delayed(const Duration(seconds: 1));
-
     bool isUserLoggedIn = await AuthController.checkAuthState();
 
     if (mounted) {

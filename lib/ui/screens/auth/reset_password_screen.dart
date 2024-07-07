@@ -6,7 +6,6 @@ import 'package:module_18_assignment/ui/widgets/background_widget.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
-
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
@@ -15,7 +14,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _confirmPasswordTEController =
       TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

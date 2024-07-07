@@ -63,7 +63,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _firstNameTEController,
-                        decoration: const InputDecoration(hintText: 'First name'),
+                        decoration:
+                            const InputDecoration(hintText: 'First name'),
                         validator: (String? value) {
                           if (value?.trim().isEmpty ?? true) {
                             return 'Enter your first name';
@@ -74,7 +75,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _lastNameTEController,
-                        decoration: const InputDecoration(hintText: 'Last name'),
+                        decoration:
+                            const InputDecoration(hintText: 'Last name'),
                         validator: (String? value) {
                           if (value?.trim().isEmpty ?? true) {
                             return 'Enter your last name';

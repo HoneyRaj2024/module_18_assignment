@@ -4,9 +4,8 @@ class TaskModel {
   String? description;
   String? status;
   String? createdDate;
-
-  TaskModel({this.sId, this.title, this.description, this.status, this.createdDate});
-
+  TaskModel(
+      {this.sId, this.title, this.description, this.status, this.createdDate});
   TaskModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     title = json['title'];
@@ -14,7 +13,6 @@ class TaskModel {
     status = json['status'];
     createdDate = json['createdDate'];
   }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;

@@ -9,7 +9,6 @@ import 'package:module_18_assignment/ui/widgets/snack_bar_message.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});
-
   @override
   State<AddNewTaskScreen> createState() => _AddNewTaskScreenState();
 }
@@ -20,7 +19,6 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _addNewTaskInProgress = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

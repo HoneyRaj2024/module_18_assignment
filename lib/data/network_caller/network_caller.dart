@@ -1,12 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:module_18_assignment/app.dart';
 import 'package:module_18_assignment/data/model/network_response.dart';
 import 'package:module_18_assignment/ui/controllers/auth_controller.dart';
 import 'package:module_18_assignment/ui/screens/auth/sign_in_screen.dart';
-
 
 class NetworkCaller {
   static Future<NetworkResponse> getRequest(String url) async {
@@ -46,9 +44,9 @@ class NetworkCaller {
   }
 
   static Future<NetworkResponse> postRequest(
-      String url, {
-        Map<String, dynamic>? body,
-      }) async {
+    String url, {
+    Map<String, dynamic>? body,
+  }) async {
     try {
       debugPrint(url);
       debugPrint(body.toString());
@@ -94,7 +92,9 @@ class NetworkCaller {
     await AuthController.clearAllData();
     Navigator.pushAndRemoveUntil(
         TaskManagerApp.navigatorKey.currentContext!,
-        MaterialPageRoute(builder: (context) => const SignInScreen()),
-            (route) => false);
+        MaterialPageRoute(
+          builder: (context) => const SignInScreen(),
+        ),
+        (route) => false);
   }
 }

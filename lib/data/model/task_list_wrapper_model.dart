@@ -3,9 +3,7 @@ import 'task_model.dart';
 class TaskListWrapperModel {
   String? status;
   List<TaskModel>? taskList;
-
   TaskListWrapperModel({this.status, this.taskList});
-
   TaskListWrapperModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {
@@ -15,7 +13,6 @@ class TaskListWrapperModel {
       });
     }
   }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;

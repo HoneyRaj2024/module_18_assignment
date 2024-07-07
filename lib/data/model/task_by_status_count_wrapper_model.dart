@@ -3,9 +3,7 @@ import 'package:module_18_assignment/data/model/task_count_by_status_model.dart'
 class TaskCountByStatusWrapperModel {
   String? status;
   List<TaskCountByStatusModel>? taskCountByStatusList;
-
   TaskCountByStatusWrapperModel({this.status, this.taskCountByStatusList});
-
   TaskCountByStatusWrapperModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['data'] != null) {

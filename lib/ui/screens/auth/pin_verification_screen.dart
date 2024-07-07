@@ -8,14 +8,12 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PinVerificationScreen extends StatefulWidget {
   const PinVerificationScreen({super.key});
-
   @override
   State<PinVerificationScreen> createState() => _PinVerificationScreenState();
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
   final TextEditingController _pinTEController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

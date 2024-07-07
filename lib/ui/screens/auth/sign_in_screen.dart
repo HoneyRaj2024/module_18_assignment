@@ -15,7 +15,6 @@ import 'package:module_18_assignment/ui/widgets/snack_bar_message.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
-
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
@@ -25,7 +24,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _signInApiInProgress = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -15,7 +15,6 @@ import 'package:module_18_assignment/ui/widgets/task_summary_card.dart';
 
 class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});
-
   @override
   State<NewTaskScreen> createState() => _NewTaskScreenState();
 }
@@ -25,7 +24,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   bool _getTaskCountByStatusInProgress = false;
   List<TaskModel> newTaskList = [];
   List<TaskCountByStatusModel> taskCountByStatusList = [];
-
   @override
   void initState() {
     super.initState();

@@ -6,7 +6,6 @@ import 'package:module_18_assignment/ui/widgets/background_widget.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key});
-
   @override
   State<EmailVerificationScreen> createState() =>
       _EmailVerificationScreenState();
@@ -14,7 +13,6 @@ class EmailVerificationScreen extends StatefulWidget {
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   final TextEditingController _emailTEController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

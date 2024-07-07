@@ -8,7 +8,6 @@ import 'package:module_18_assignment/ui/widgets/profile_app_bar.dart';
 
 class MainBottomNavScreen extends StatefulWidget {
   const MainBottomNavScreen({super.key});
-
   @override
   State<MainBottomNavScreen> createState() => _MainBottomNavScreenState();
 }
@@ -21,7 +20,6 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
     InProgressTaskScreen(),
     CancelledTaskScreen()
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

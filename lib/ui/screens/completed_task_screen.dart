@@ -10,7 +10,6 @@ import 'package:module_18_assignment/ui/widgets/task_item.dart';
 
 class CompletedTaskScreen extends StatefulWidget {
   const CompletedTaskScreen({super.key});
-
   @override
   State<CompletedTaskScreen> createState() => _CompletedTaskScreenState();
 }
@@ -18,7 +17,6 @@ class CompletedTaskScreen extends StatefulWidget {
 class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
   bool _getCompletedTasksInProgress = false;
   List<TaskModel> completedTasks = [];
-
   @override
   void initState() {
     super.initState();
@@ -55,15 +53,15 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
       setState(() {});
     }
     NetworkResponse response =
-    await NetworkCaller.getRequest(Urls.completedTask);
+        await NetworkCaller.getRequest(Urls.completedTask);
     if (response.isSuccess) {
       TaskListWrapperModel taskListWrapperModel =
-      TaskListWrapperModel.fromJson(response.responseData);
+          TaskListWrapperModel.fromJson(response.responseData);
       completedTasks = taskListWrapperModel.taskList ?? [];
     } else {
       if (mounted) {
-        showSnackBarMessage(
-            context, response.errorMessage ?? 'Get completed tasks failed! Try again');
+        showSnackBarMessage(context,
+            response.errorMessage ?? 'Get completed tasks failed! Try again');
       }
     }
     _getCompletedTasksInProgress = false;
