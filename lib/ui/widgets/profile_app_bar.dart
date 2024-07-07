@@ -9,6 +9,16 @@ import 'package:module_18_assignment/ui/utility/app_colors.dart';
 AppBar profileAppBar(context, [bool fromUpdateProfile = false]) {
   return AppBar(
     backgroundColor: AppColors.themeColor,
+    elevation: 0,
+    flexibleSpace: Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blue, Colors.purple],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+    ),
     leading: GestureDetector(
       onTap: () {
         if (fromUpdateProfile) {

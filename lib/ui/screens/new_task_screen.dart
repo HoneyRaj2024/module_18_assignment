@@ -24,6 +24,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   bool _getTaskCountByStatusInProgress = false;
   List<TaskModel> newTaskList = [];
   List<TaskCountByStatusModel> taskCountByStatusList = [];
+
   @override
   void initState() {
     super.initState();
@@ -69,7 +70,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _onTapAddButton,
-        backgroundColor: AppColors.themeColor,
+        backgroundColor: AppColors.cyanThemeColor,
         foregroundColor: Colors.white,
         child: const Icon(Icons.add),
       ),
@@ -96,14 +97,56 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: taskCountByStatusList.map((e) {
-            return TaskSummaryCard(
-              title: (e.sId ?? 'Unknown').toUpperCase(),
-              count: e.sum.toString(),
+            return Container(
+              decoration: BoxDecoration(
+                gradient: getStatusGradient(e.sId ?? 'Unknown'),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              child: TaskSummaryCard(
+                title: (e.sId ?? 'Unknown').toUpperCase(),
+                count: e.sum.toString(),
+              ),
             );
           }).toList(),
         ),
       ),
     );
+  }
+
+  LinearGradient getStatusGradient(String status) {
+    switch (status) {
+      case 'New':
+        return LinearGradient(
+          colors: [Colors.green.shade200, Colors.green.shade900],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      case 'Progress':
+        return LinearGradient(
+          colors: [Colors.blue.shade200, Colors.blue.shade900],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      case 'Completed':
+        return LinearGradient(
+          colors: [Colors.cyan.shade200, Colors.cyan.shade900],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      case 'Cancelled':
+        return LinearGradient(
+          colors: [Colors.red.shade200, Colors.red.shade900],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+      default:
+        return LinearGradient(
+          colors: [Colors.cyan, Colors.blue.shade900],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        );
+    }
   }
 
   Future<void> _getNewTasks() async {

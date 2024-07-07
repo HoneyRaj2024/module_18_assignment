@@ -12,20 +12,25 @@ class TaskSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      elevation: 3,
+    return Container(
+      padding: const EdgeInsets.all(8),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Column(
           children: [
             Text(
               count,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold),
             ),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleSmall,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal),
             ),
           ],
         ),

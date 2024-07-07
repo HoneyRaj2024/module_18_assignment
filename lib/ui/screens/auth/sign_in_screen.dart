@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:module_18_assignment/data/model/login_model.dart';
 import 'package:module_18_assignment/data/model/network_response.dart';
 import 'package:module_18_assignment/data/network_caller/network_caller.dart';
@@ -10,6 +11,7 @@ import 'package:module_18_assignment/ui/screens/auth/sign_up_screen.dart';
 import 'package:module_18_assignment/ui/screens/main_bottom_nav_screen.dart';
 import 'package:module_18_assignment/ui/utility/app_colors.dart';
 import 'package:module_18_assignment/ui/utility/app_constants.dart';
+import 'package:module_18_assignment/ui/utility/asset_paths.dart';
 import 'package:module_18_assignment/ui/widgets/background_widget.dart';
 import 'package:module_18_assignment/ui/widgets/snack_bar_message.dart';
 
@@ -39,6 +41,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      SvgPicture.asset(
+                        AssetPaths.appLogoSvg,
+                        width: 140,
+                      ),
+                      const SizedBox(height: 35),
                       Text(
                         'Get Started With',
                         style: Theme.of(context).textTheme.titleLarge,

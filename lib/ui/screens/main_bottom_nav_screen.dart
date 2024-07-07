@@ -14,24 +14,36 @@ class MainBottomNavScreen extends StatefulWidget {
 
 class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
   int _selectedIndex = 0;
+
   final List<Widget> _screens = const [
     NewTaskScreen(),
     CompletedTaskScreen(),
     InProgressTaskScreen(),
     CancelledTaskScreen()
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: profileAppBar(context),
-      body: _screens[_selectedIndex],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        switchInCurve: Curves.easeIn,
+        switchOutCurve: Curves.easeOut,
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+        child: _screens[_selectedIndex],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
-          _selectedIndex = index;
-          if (mounted) {
-            setState(() {});
-          }
+          setState(() {
+            _selectedIndex = index;
+          });
         },
         selectedItemColor: AppColors.themeColor,
         unselectedItemColor: Colors.grey,

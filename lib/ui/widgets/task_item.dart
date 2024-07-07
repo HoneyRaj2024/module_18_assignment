@@ -50,14 +50,15 @@ class _TaskItemState extends State<TaskItem> {
         child: ListTile(
           title: Text(
             widget.taskModel.title ?? '',
-            style: const TextStyle(color: Colors.white,fontSize: 18, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 widget.taskModel.description ?? '',
-                style: const TextStyle(color: Colors.white,fontSize: 16),
+                style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
               Text(
                 'Date: ${widget.taskModel.createdDate}',
@@ -75,7 +76,7 @@ class _TaskItemState extends State<TaskItem> {
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
-                      side: const BorderSide(color: Colors.cyan)
+                      side: const BorderSide(color: Colors.cyan),
                     ),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -110,14 +111,32 @@ class _TaskItemState extends State<TaskItem> {
                             return statusList.map((String value) {
                               return PopupMenuItem<String>(
                                 value: value,
-                                child: ListTile(
-                                  title: Text(value),
-                                  trailing: dropdownValue == value
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: Colors.cyan,
-                                        )
-                                      : null,
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Colors.cyan,
+                                        Colors.blue.shade900
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                  ),
+                                  child: ListTile(
+                                    title: Text(
+                                      value,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                    trailing: dropdownValue == value
+                                        ? const Icon(
+                                            Icons.done,
+                                            color: Colors.cyan,
+                                          )
+                                        : null,
+                                  ),
                                 ),
                               );
                             }).toList();
@@ -125,9 +144,9 @@ class _TaskItemState extends State<TaskItem> {
                         ),
                       ),
                     ],
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

@@ -1,18 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:module_18_assignment/data/model/network_response.dart';
 import 'package:module_18_assignment/data/model/user_model.dart';
 import 'package:module_18_assignment/data/network_caller/network_caller.dart';
 import 'package:module_18_assignment/data/utilities/urls.dart';
 import 'package:module_18_assignment/ui/controllers/auth_controller.dart';
+import 'package:module_18_assignment/ui/utility/asset_paths.dart';
 import 'package:module_18_assignment/ui/widgets/background_widget.dart';
 import 'package:module_18_assignment/ui/widgets/centered_progress_indicator.dart';
 import 'package:module_18_assignment/ui/widgets/profile_app_bar.dart';
-import 'package:module_18_assignment/ui/widgets/snack_bar_message.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -40,63 +40,81 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     _lastNameTEController.text = userData.lastName ?? '';
     _mobileTEController.text = userData.mobile ?? '';
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: profileAppBar(context, true),
       body: BackgroundWidget(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 48),
-                  Text('Update Profile',
-                      style: Theme.of(context).textTheme.titleLarge),
-                  const SizedBox(height: 24),
-                  _buildPhotoPickerWidget(),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _emailTEController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(hintText: 'Email'),
-                    enabled: false,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Center(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        AssetPaths.appLogoSvg,
+                        width: 140,
+                      ),
+                      const SizedBox(height: 35),
+                      Text('Update Profile',
+                          style: Theme.of(context).textTheme.titleLarge),
+                      const SizedBox(height: 24),
+                      _buildPhotoPickerWidget(),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _emailTEController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(hintText: 'Email'),
+                        enabled: false,
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _firstNameTEController,
+                        decoration:
+                            const InputDecoration(hintText: 'First name'),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _lastNameTEController,
+                        decoration:
+                            const InputDecoration(hintText: 'Last name'),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _mobileTEController,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(hintText: 'Mobile'),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        controller: _passwordTEController,
+                        decoration: const InputDecoration(hintText: 'Password'),
+                      ),
+                      const SizedBox(height: 16),
+                      Visibility(
+                        visible: _updateProfileInProgress == false,
+                        replacement: const CenteredProgressIndicator(),
+                        child: ElevatedButton(
+                          onPressed: _updateProfile,
+                          child: const Icon(Icons.arrow_circle_right_outlined),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // New Button
+                      TextButton(
+                        onPressed: _backToNewTaskScreen,
+                        child: const Text('Back to New Task Screen'),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _firstNameTEController,
-                    decoration: const InputDecoration(hintText: 'First name'),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _lastNameTEController,
-                    decoration: const InputDecoration(hintText: 'Last name'),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _mobileTEController,
-                    keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(hintText: 'Mobile'),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _passwordTEController,
-                    decoration: const InputDecoration(hintText: 'Password'),
-                  ),
-                  const SizedBox(height: 16),
-                  Visibility(
-                    visible: _updateProfileInProgress == false,
-                    replacement: const CenteredProgressIndicator(),
-                    child: ElevatedButton(
-                      onPressed: _updateProfile,
-                      child: const Icon(Icons.arrow_circle_right_outlined),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
+                ),
               ),
             ),
           ),
@@ -104,6 +122,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       ),
     );
   }
+
   Future<void> _updateProfile() async {
     _updateProfileInProgress = true;
     String encodePhoto = AuthController.userData?.photo ?? '';
@@ -139,18 +158,85 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       );
       await AuthController.saveUserData(userModel);
       if (mounted) {
-        showSnackBarMessage(context, 'Profile updated!');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.transparent,
+              content: Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.blue,
+                      Colors.green,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      child: Text(
+                        'Profile updated Successful',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'OK',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
       }
     } else {
       if (mounted) {
-        showSnackBarMessage(context,
-            response.errorMessage ?? 'Profile update failed! Try again');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: Text(
+                  response.errorMessage ?? 'Profile update failed! Try again'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
     }
     _updateProfileInProgress = false;
     if (mounted) {
       setState(() {});
     }
+  }
+
+  void _backToNewTaskScreen() {
+    Navigator.pop(context); // Adjust this to navigate to the New Task Screen
   }
 
   Widget _buildPhotoPickerWidget() {
