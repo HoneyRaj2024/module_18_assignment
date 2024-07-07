@@ -34,70 +34,102 @@ class _TaskItemState extends State<TaskItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: Colors.white,
-      child: ListTile(
-        title: Text(widget.taskModel.title ?? ''),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(widget.taskModel.description ?? ''),
-            Text(
-              'Date: ${widget.taskModel.createdDate}',
-              style: const TextStyle(
-                  color: Colors.black, fontWeight: FontWeight.w600),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Chip(
-                  label: Text(widget.taskModel.status ?? 'New'),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                ),
-                ButtonBar(
-                  children: [
-                    Visibility(
-                      visible: _deleteInProgress == false,
-                      replacement: const CenteredProgressIndicator(),
-                      child: IconButton(
-                        onPressed: () {
-                          _deleteTask();
-                        },
-                        icon: const Icon(Icons.delete),
-                      ),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.cyan, Colors.blue.shade900],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      child: Card(
+        elevation: 0,
+        color: Colors.transparent,
+        child: ListTile(
+          title: Text(
+            widget.taskModel.title ?? '',
+            style: const TextStyle(color: Colors.white,fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.taskModel.description ?? '',
+                style: const TextStyle(color: Colors.white,fontSize: 16),
+              ),
+              Text(
+                'Date: ${widget.taskModel.createdDate}',
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.w600),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Chip(
+                    backgroundColor: Colors.green,
+                    label: Text(
+                      widget.taskModel.status ?? 'New',
+                      style: const TextStyle(color: Colors.white),
                     ),
-                    Visibility(
-                      visible: _editInProgress == false,
-                      replacement: const CenteredProgressIndicator(),
-                      child: PopupMenuButton<String>(
-                        icon: const Icon(Icons.edit),
-                        onSelected: (String selectedValue) {
-                          _updateTaskStatus(selectedValue);
-                        },
-                        itemBuilder: (BuildContext context) {
-                          return statusList.map((String value) {
-                            return PopupMenuItem<String>(
-                              value: value,
-                              child: ListTile(
-                                title: Text(value),
-                                trailing: dropdownValue == value
-                                    ? const Icon(Icons.done)
-                                    : null,
-                              ),
-                            );
-                          }).toList();
-                        },
-                      ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: const BorderSide(color: Colors.cyan)
                     ),
-                  ],
-                )
-              ],
-            )
-          ],
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  ),
+                  ButtonBar(
+                    children: [
+                      Visibility(
+                        visible: _deleteInProgress == false,
+                        replacement: const CenteredProgressIndicator(),
+                        child: IconButton(
+                          onPressed: () {
+                            _deleteTask();
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: _editInProgress == false,
+                        replacement: const CenteredProgressIndicator(),
+                        child: PopupMenuButton<String>(
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Colors.greenAccent,
+                          ),
+                          onSelected: (String selectedValue) {
+                            _updateTaskStatus(selectedValue);
+                          },
+                          itemBuilder: (BuildContext context) {
+                            return statusList.map((String value) {
+                              return PopupMenuItem<String>(
+                                value: value,
+                                child: ListTile(
+                                  title: Text(value),
+                                  trailing: dropdownValue == value
+                                      ? const Icon(
+                                          Icons.done,
+                                          color: Colors.cyan,
+                                        )
+                                      : null,
+                                ),
+                              );
+                            }).toList();
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
