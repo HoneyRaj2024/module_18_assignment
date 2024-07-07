@@ -13,6 +13,7 @@ import 'package:module_18_assignment/ui/utility/asset_paths.dart';
 import 'package:module_18_assignment/ui/widgets/background_widget.dart';
 import 'package:module_18_assignment/ui/widgets/centered_progress_indicator.dart';
 import 'package:module_18_assignment/ui/widgets/profile_app_bar.dart';
+import 'package:module_18_assignment/ui/widgets/show_dialog.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -109,7 +110,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       // New Button
                       TextButton(
                         onPressed: _backToNewTaskScreen,
-                        child: const Text('Back to New Task Screen'),
+                        child: const Text('Back to Home'),
                       ),
                       const SizedBox(height: 16),
                     ],
@@ -158,75 +159,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       );
       await AuthController.saveUserData(userModel);
       if (mounted) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: Colors.transparent,
-              content: Container(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Colors.blue,
-                      Colors.green,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      child: Text(
-                        'Profile updated Successful',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        'OK',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+        showCustomDialog(context, 'Profile Successfully Updated');
       }
     } else {
       if (mounted) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Error'),
-              content: Text(
-                  response.errorMessage ?? 'Profile update failed! Try again'),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
+        showCustomDialog(context, 'Profile update failed! Try again');
       }
     }
     _updateProfileInProgress = false;

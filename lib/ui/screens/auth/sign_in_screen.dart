@@ -181,11 +181,26 @@ class _SignInScreenState extends State<SignInScreen> {
   void _onTapSignUpButton() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const SignUpScreen(),
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => const SignUpScreen(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = 0.0;
+          const end = 1.0;
+          const curve = Curves.easeIn;
+
+          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var opacityAnimation = animation.drive(tween);
+
+          return FadeTransition(
+            opacity: opacityAnimation,
+            child: child,
+          );
+        },
       ),
     );
   }
+
+
 
   void _onTapForgotPasswordButton() {
     Navigator.push(
