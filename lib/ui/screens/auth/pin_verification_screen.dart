@@ -15,7 +15,8 @@ class PinVerificationScreen extends StatefulWidget {
   final String otp;
   const PinVerificationScreen({
     super.key,
-    required this.emailAddress, required this.otp,
+    required this.emailAddress,
+    required this.otp,
   });
   @override
   State<PinVerificationScreen> createState() => _PinVerificationScreenState();
@@ -58,7 +59,9 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: _isLoading ? null : _onTapVerifyOtpButton,
-                      child: _isLoading ? const CircularProgressIndicator() : const Text('Verify'),
+                      child: _isLoading
+                          ? const CircularProgressIndicator()
+                          : const Text('Verify'),
                     ),
                     const SizedBox(height: 36),
                     _buildSignInSection()
@@ -123,7 +126,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
       MaterialPageRoute(
         builder: (context) => const SignInScreen(),
       ),
-          (route) => false,
+      (route) => false,
     );
   }
 
@@ -145,12 +148,18 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ResetPasswordScreen(emailAddress: widget.emailAddress, otp: otp,),
+          builder: (context) => ResetPasswordScreen(
+            emailAddress: widget.emailAddress,
+            otp: otp,
+          ),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to verify OTP: ${response.errorMessage ?? 'Unknown error'}')),
+        SnackBar(
+          content: Text(
+              'Failed to verify OTP: ${response.errorMessage ?? 'Unknown error'}'),
+        ),
       );
     }
   }
