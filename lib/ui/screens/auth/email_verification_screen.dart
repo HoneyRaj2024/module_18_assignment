@@ -7,7 +7,7 @@ import 'package:module_18_assignment/ui/screens/auth/pin_verification_screen.dar
 import 'package:module_18_assignment/ui/utility/app_colors.dart';
 import 'package:module_18_assignment/ui/utility/asset_paths.dart';
 import 'package:module_18_assignment/ui/widgets/background_widget.dart';
-  // Import NetworkCaller
+// Import NetworkCaller
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key});
@@ -75,7 +75,8 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           children: [
                             TextSpan(
                               text: 'Sign in',
-                              style: const TextStyle(color: AppColors.themeColor),
+                              style:
+                                  const TextStyle(color: AppColors.themeColor),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = _onTapSignInButton,
                             ),
@@ -115,12 +116,18 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PinVerificationScreen(emailAddress: email, otp: '',), // Pass email address
+          builder: (context) => PinVerificationScreen(
+            emailAddress: email,
+            otp: '',
+          ), // Pass email address
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to send verification email: ${response.errorMessage ?? 'Unknown error'}')),
+        SnackBar(
+          content: Text(
+              'Failed to send verification email: ${response.errorMessage ?? 'Unknown error'}'),
+        ),
       );
     }
   }
