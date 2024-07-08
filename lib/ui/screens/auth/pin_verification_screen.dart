@@ -12,9 +12,10 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PinVerificationScreen extends StatefulWidget {
   final String emailAddress;
+  final String otp;
   const PinVerificationScreen({
     super.key,
-    required this.emailAddress,
+    required this.emailAddress, required this.otp,
   });
   @override
   State<PinVerificationScreen> createState() => _PinVerificationScreenState();
@@ -144,7 +145,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const ResetPasswordScreen(),
+          builder: (context) => ResetPasswordScreen(emailAddress: widget.emailAddress, otp: otp,),
         ),
       );
     } else {
