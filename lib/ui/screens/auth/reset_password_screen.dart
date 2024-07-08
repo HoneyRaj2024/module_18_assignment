@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:module_18_assignment/ui/screens/auth/sign_in_screen.dart';
 import 'package:module_18_assignment/ui/utility/app_colors.dart';
+import 'package:module_18_assignment/ui/utility/asset_paths.dart';
 import 'package:module_18_assignment/ui/widgets/background_widget.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -26,6 +28,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 100),
+                  SvgPicture.asset(
+                    AssetPaths.appLogoSvg,
+                    width: 140,
+                  ),
+                  const SizedBox(height: 35),
                   Text(
                     'Set Password',
                     style: Theme.of(context).textTheme.titleLarge,

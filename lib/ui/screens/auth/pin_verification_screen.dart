@@ -1,49 +1,68 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:module_18_assignment/data/model/network_response.dart';
+import 'package:module_18_assignment/data/network_caller/network_caller.dart';
 import 'package:module_18_assignment/ui/screens/auth/reset_password_screen.dart';
 import 'package:module_18_assignment/ui/screens/auth/sign_in_screen.dart';
 import 'package:module_18_assignment/ui/utility/app_colors.dart';
+import 'package:module_18_assignment/ui/utility/asset_paths.dart';
 import 'package:module_18_assignment/ui/widgets/background_widget.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PinVerificationScreen extends StatefulWidget {
-  const PinVerificationScreen({super.key});
+  final String emailAddress;
+  const PinVerificationScreen({
+    super.key,
+    required this.emailAddress,
+  });
   @override
   State<PinVerificationScreen> createState() => _PinVerificationScreenState();
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
   final TextEditingController _pinTEController = TextEditingController();
+  bool _isLoading = false;
+
+  static const String _baseUrl = 'https://task.teamrabbil.com/api/v1';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackgroundWidget(
         child: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 100),
-                  Text(
-                    'Pin Verification',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  Text(
-                    'A 6 digits verification pin has been sent to your email address',
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 24),
-                  _buildPinCodeTextField(),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _onTapVerifyOtpButton,
-                    child: const Text('Verify'),
-                  ),
-                  const SizedBox(height: 36),
-                  _buildSignInSection()
-                ],
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      AssetPaths.appLogoSvg,
+                      width: 140,
+                    ),
+                    const SizedBox(height: 35),
+                    Text(
+                      'Pin Verification',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    Text(
+                      'A 6 digits verification pin has been sent to your email address',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 24),
+                    _buildPinCodeTextField(),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _isLoading ? null : _onTapVerifyOtpButton,
+                      child: _isLoading ? const CircularProgressIndicator() : const Text('Verify'),
+                    ),
+                    const SizedBox(height: 36),
+                    _buildSignInSection()
+                  ],
+                ),
               ),
             ),
           ),
@@ -103,17 +122,41 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
       MaterialPageRoute(
         builder: (context) => const SignInScreen(),
       ),
-      (route) => false,
+          (route) => false,
     );
   }
 
-  void _onTapVerifyOtpButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const ResetPasswordScreen(),
-      ),
-    );
+  void _onTapVerifyOtpButton() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String otp = _pinTEController.text.trim();
+    final response = await _verifyOTP(otp);
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (response.isSuccess) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ResetPasswordScreen(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to verify OTP: ${response.errorMessage ?? 'Unknown error'}')),
+      );
+    }
+  }
+
+  Future<NetworkResponse> _verifyOTP(String otp) async {
+    final String url = '$_baseUrl/RecoverVerifyOTP/${widget.emailAddress}/$otp';
+    return NetworkCaller.getRequest(url);
   }
 
   @override
