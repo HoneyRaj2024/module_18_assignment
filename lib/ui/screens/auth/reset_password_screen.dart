@@ -120,7 +120,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   void _onTapConfirmButton() async {
     if (_passwordTEController.text != _confirmPasswordTEController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
+        const SnackBar(
+          content: Text('Passwords do not match'),
+        ),
       );
       return;
     }
@@ -152,8 +154,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(
-                'Failed to reset password: ${response.errorMessage ?? 'Unknown error'}')),
+          content: Text(
+              'Failed to reset password: ${response.errorMessage ?? 'Unknown error'}'),
+        ),
       );
     }
   }
