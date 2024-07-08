@@ -22,7 +22,8 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  final TextEditingController _confirmPasswordTEController = TextEditingController();
+  final TextEditingController _confirmPasswordTEController =
+      TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   bool _isLoading = false;
 
@@ -58,13 +59,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     TextFormField(
                       controller: _passwordTEController,
                       decoration: const InputDecoration(hintText: 'Password'),
-                      obscureText: true,
+                      obscureText: false,
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
                       controller: _confirmPasswordTEController,
-                      decoration: const InputDecoration(hintText: 'Confirm Password'),
-                      obscureText: true,
+                      decoration:
+                          const InputDecoration(hintText: 'Confirm Password'),
+                      obscureText: false,
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
@@ -86,7 +88,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           children: [
                             TextSpan(
                               text: 'Sign in',
-                              style: const TextStyle(color: AppColors.themeColor),
+                              style:
+                                  const TextStyle(color: AppColors.themeColor),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = _onTapSignInButton,
                             )
@@ -110,7 +113,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       MaterialPageRoute(
         builder: (context) => const SignInScreen(),
       ),
-          (route) => false,
+      (route) => false,
     );
   }
 
@@ -144,16 +147,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         MaterialPageRoute(
           builder: (context) => const SignInScreen(),
         ),
-            (route) => false,
+        (route) => false,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to reset password: ${response.errorMessage ?? 'Unknown error'}')),
+        SnackBar(
+            content: Text(
+                'Failed to reset password: ${response.errorMessage ?? 'Unknown error'}')),
       );
     }
   }
 
-  Future<NetworkResponse> _resetPassword(String email, String otp, String password) async {
+  Future<NetworkResponse> _resetPassword(
+      String email, String otp, String password) async {
     const String url = '$_baseUrl/RecoverResetPass';
     final Map<String, dynamic> body = {
       'email': email,

@@ -68,11 +68,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _onTapAddButton,
-        backgroundColor: AppColors.cyanThemeColor,
-        foregroundColor: Colors.white,
-        child: const Icon(Icons.add),
+      floatingActionButton: ClipRRect(
+        borderRadius: BorderRadius.circular(28),
+        child: FloatingActionButton(
+          onPressed: _onTapAddButton,
+          backgroundColor: AppColors.cyanThemeColor,
+          foregroundColor: Colors.white,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
