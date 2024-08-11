@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:module_18_assignment/data/model/network_response.dart';
 import 'package:module_18_assignment/data/network_caller/network_caller.dart';
 import 'package:module_18_assignment/data/utilities/urls.dart';
@@ -24,8 +25,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _lastNameTEController = TextEditingController();
   final TextEditingController _mobileTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _showPassword = false;
-  bool _registrationInProgress = false;
+
+  final _showPassword = false.obs;
+  final _registrationInProgress = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       TextFormField(
                         controller: _firstNameTEController,
                         decoration:
-                            const InputDecoration(hintText: 'First name'),
+                        const InputDecoration(hintText: 'First name'),
                         validator: (String? value) {
                           if (value?.trim().isEmpty ?? true) {
                             return 'Enter your first name';
@@ -83,7 +85,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       TextFormField(
                         controller: _lastNameTEController,
                         decoration:
-                            const InputDecoration(hintText: 'Last name'),
+                        const InputDecoration(hintText: 'Last name'),
                         validator: (String? value) {
                           if (value?.trim().isEmpty ?? true) {
                             return 'Enter your last name';
@@ -107,21 +109,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
                       const SizedBox(height: 8),
-                      TextFormField(
-                        obscureText: _showPassword == false,
+                      Obx(() => TextFormField(
+                        obscureText: _showPassword.value == false,
                         controller: _passwordTEController,
                         decoration: InputDecoration(
                           hintText: 'Password',
                           suffixIcon: IconButton(
                             onPressed: () {
-                              _showPassword = !_showPassword;
-                              if (mounted) {
-                                setState(() {});
-                              }
+                              _showPassword.value = !_showPassword.value;
                             },
-                            icon: Icon(_showPassword
-                                ? Icons.remove_red_eye
-                                : Icons.visibility_off),
+                            icon: Icon(
+                              _showPassword.value
+                                  ? Icons.remove_red_eye
+                                  : Icons.visibility_off,
+                            ),
                           ),
                         ),
                         validator: (String? value) {
@@ -130,10 +131,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                           return null;
                         },
-                      ),
+                      )),
                       const SizedBox(height: 16),
-                      Visibility(
-                        visible: _registrationInProgress == false,
+                      Obx(() => Visibility(
+                        visible: _registrationInProgress.value == false,
                         replacement: const Center(
                           child: CircularProgressIndicator(),
                         ),
@@ -143,11 +144,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               _registerUser();
                             }
                           },
-                          child: const Icon(Icons.arrow_circle_right_outlined),
+                          child:
+                          const Icon(Icons.arrow_circle_right_outlined),
                         ),
-                      ),
+                      )),
                       const SizedBox(height: 36),
-                      _buildBackToSignInSection()
+                      _buildBackToSignInSection(),
                     ],
                   ),
                 ),
@@ -168,13 +170,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
             fontWeight: FontWeight.w600,
             letterSpacing: 0.4,
           ),
-          text: "Have account? ",
+          text: "Have an account? ",
           children: [
             TextSpan(
               text: 'Sign In',
               style: const TextStyle(color: AppColors.themeColor),
               recognizer: TapGestureRecognizer()..onTap = _onTapSignInButton,
-            )
+            ),
           ],
         ),
       ),
@@ -182,10 +184,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _registerUser() async {
-    _registrationInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
+    _registrationInProgress.value = true;
+
     Map<String, dynamic> requestInput = {
       "email": _emailTEController.text.trim(),
       "firstName": _firstNameTEController.text.trim(),
@@ -194,24 +194,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "password": _passwordTEController.text,
       "photo": ""
     };
+
     NetworkResponse response =
-        await NetworkCaller.postRequest(Urls.registration, body: requestInput);
-    _registrationInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
+    await NetworkCaller.postRequest(Urls.registration, body: requestInput);
+    _registrationInProgress.value = false;
+
     if (response.isSuccess) {
       _clearTextFields();
-      if (mounted) {
-        showSnackBarMessage(context, 'Registration success');
-      }
+      showSnackBarMessage(Get.context!, 'Registration success');
     } else {
-      if (mounted) {
-        showSnackBarMessage(
-          context,
-          response.errorMessage ?? 'Registration failed! Try again.',
-        );
-      }
+      showSnackBarMessage(
+        Get.context!,
+        response.errorMessage ?? 'Registration failed! Try again.',
+      );
     }
   }
 
@@ -224,7 +219,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onTapSignInButton() {
-    Navigator.pop(context);
+    Get.back(); // Replaces Navigator.pop(context) with GetX's navigation method
   }
 
   @override

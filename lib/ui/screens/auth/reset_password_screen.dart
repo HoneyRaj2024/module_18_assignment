@@ -111,7 +111,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (context) => const SignInScreen(),
+        builder: (context) => SignInScreen(),
       ),
       (route) => false,
     );
@@ -147,7 +147,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => const SignInScreen(),
+          builder: (context) => SignInScreen(),
         ),
         (route) => false,
       );

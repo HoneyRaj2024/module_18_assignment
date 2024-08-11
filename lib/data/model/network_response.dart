@@ -4,9 +4,10 @@ class NetworkResponse {
   final dynamic responseData;
   final String? errorMessage;
 
-  NetworkResponse(
-      {required this.statusCode,
-      required this.isSuccess,
-      this.responseData,
-      this.errorMessage = 'Something went wrong'});
+  NetworkResponse({
+    required this.statusCode,
+    required this.isSuccess,
+    this.responseData,
+    this.errorMessage = 'Something went wrong',
+  });
 }

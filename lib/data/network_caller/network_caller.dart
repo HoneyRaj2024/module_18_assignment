@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:module_18_assignment/app.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http; // Use alias for http package
 import 'package:module_18_assignment/data/model/network_response.dart';
 import 'package:module_18_assignment/ui/controllers/auth_controller.dart';
 import 'package:module_18_assignment/ui/screens/auth/sign_in_screen.dart';
@@ -10,7 +10,7 @@ class NetworkCaller {
   static Future<NetworkResponse> getRequest(String url) async {
     try {
       debugPrint(url);
-      Response response = await get(Uri.parse(url), headers: {
+      http.Response response = await http.get(Uri.parse(url), headers: {
         'token': AuthController.accessToken,
       });
       debugPrint(response.statusCode.toString());
@@ -44,13 +44,13 @@ class NetworkCaller {
   }
 
   static Future<NetworkResponse> postRequest(
-    String url, {
-    Map<String, dynamic>? body,
-  }) async {
+      String url, {
+        Map<String, dynamic>? body,
+      }) async {
     try {
       debugPrint(url);
       debugPrint(body.toString());
-      Response response = await post(
+      http.Response response = await http.post(
         Uri.parse(url),
         body: jsonEncode(body),
         headers: {
@@ -90,11 +90,6 @@ class NetworkCaller {
 
   static Future<void> redirectToLogin() async {
     await AuthController.clearAllData();
-    Navigator.pushAndRemoveUntil(
-        TaskManagerApp.navigatorKey.currentContext!,
-        MaterialPageRoute(
-          builder: (context) => const SignInScreen(),
-        ),
-        (route) => false);
+    Get.offAll(() => SignInScreen());
   }
 }

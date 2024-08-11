@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:module_18_assignment/data/model/network_response.dart';
 import 'package:module_18_assignment/data/network_caller/network_caller.dart';
 import 'package:module_18_assignment/ui/screens/auth/reset_password_screen.dart';
@@ -13,18 +14,20 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 class PinVerificationScreen extends StatefulWidget {
   final String emailAddress;
   final String otp;
+
   const PinVerificationScreen({
     super.key,
     required this.emailAddress,
     required this.otp,
   });
+
   @override
   State<PinVerificationScreen> createState() => _PinVerificationScreenState();
 }
 
 class _PinVerificationScreenState extends State<PinVerificationScreen> {
   final TextEditingController _pinTEController = TextEditingController();
-  bool _isLoading = false;
+  var _isLoading = false.obs;
 
   static const String _baseUrl = 'https://task.teamrabbil.com/api/v1';
 
@@ -57,14 +60,16 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                     const SizedBox(height: 24),
                     _buildPinCodeTextField(),
                     const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _isLoading ? null : _onTapVerifyOtpButton,
-                      child: _isLoading
+                    Obx(() => ElevatedButton(
+                      onPressed: _isLoading.value
+                          ? null
+                          : () => _onTapVerifyOtpButton(),
+                      child: _isLoading.value
                           ? const CircularProgressIndicator()
                           : const Text('Verify'),
-                    ),
+                    )),
                     const SizedBox(height: 36),
-                    _buildSignInSection()
+                    _buildSignInSection(),
                   ],
                 ),
               ),
@@ -84,7 +89,7 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
             fontWeight: FontWeight.w600,
             letterSpacing: 0.4,
           ),
-          text: "Have account? ",
+          text: "Have an account? ",
           children: [
             TextSpan(
               text: 'Sign in',
@@ -121,45 +126,29 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
   }
 
   void _onTapSignInButton() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SignInScreen(),
-      ),
-      (route) => false,
-    );
+    Get.offAll(() => SignInScreen());
   }
 
   void _onTapVerifyOtpButton() async {
-    setState(() {
-      _isLoading = true;
-    });
+    _isLoading.value = true;
 
     String otp = _pinTEController.text.trim();
     final response = await _verifyOTP(otp);
 
-    if (!mounted) return;
-
-    setState(() {
-      _isLoading = false;
-    });
+    _isLoading.value = false;
 
     if (response.isSuccess) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ResetPasswordScreen(
-            emailAddress: widget.emailAddress,
-            otp: otp,
-          ),
-        ),
-      );
+      Get.to(() => ResetPasswordScreen(
+        emailAddress: widget.emailAddress,
+        otp: otp,
+      ));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Failed to verify OTP: ${response.errorMessage ?? 'Unknown error'}'),
-        ),
+      Get.snackbar(
+        'Error',
+        'Failed to verify OTP: ${response.errorMessage ?? 'Unknown error'}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
       );
     }
   }

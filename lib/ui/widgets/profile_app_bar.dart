@@ -1,12 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:module_18_assignment/ui/controllers/auth_controller.dart';
 import 'package:module_18_assignment/ui/screens/auth/sign_in_screen.dart';
 import 'package:module_18_assignment/ui/screens/update_profile_screen.dart';
 import 'package:module_18_assignment/ui/utility/app_colors.dart';
 
-AppBar profileAppBar(context, [bool fromUpdateProfile = false]) {
+AppBar profileAppBar(BuildContext context, [bool fromUpdateProfile = false]) {
   return AppBar(
     backgroundColor: AppColors.themeColor,
     elevation: 0,
@@ -21,15 +21,9 @@ AppBar profileAppBar(context, [bool fromUpdateProfile = false]) {
     ),
     leading: GestureDetector(
       onTap: () {
-        if (fromUpdateProfile) {
-          return;
+        if (!fromUpdateProfile) {
+          Get.to(() => UpdateProfileScreen());
         }
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const UpdateProfileScreen(),
-          ),
-        );
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -45,15 +39,9 @@ AppBar profileAppBar(context, [bool fromUpdateProfile = false]) {
     ),
     title: GestureDetector(
       onTap: () {
-        if (fromUpdateProfile) {
-          return;
+        if (!fromUpdateProfile) {
+          Get.to(() => const UpdateProfileScreen());
         }
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const UpdateProfileScreen(),
-          ),
-        );
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +53,10 @@ AppBar profileAppBar(context, [bool fromUpdateProfile = false]) {
           Text(
             AuthController.userData?.email ?? '',
             style: const TextStyle(
-                fontSize: 12, color: Colors.white, fontWeight: FontWeight.w500),
+              fontSize: 12,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -74,19 +65,13 @@ AppBar profileAppBar(context, [bool fromUpdateProfile = false]) {
       IconButton(
         onPressed: () async {
           await AuthController.clearAllData();
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SignInScreen(),
-            ),
-            (route) => false,
-          );
+          Get.offAll(() => SignInScreen());
         },
         icon: const Icon(
           Icons.logout,
           color: Colors.white,
         ),
-      )
+      ),
     ],
   );
 }

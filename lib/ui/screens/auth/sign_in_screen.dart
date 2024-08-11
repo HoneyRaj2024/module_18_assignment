@@ -1,31 +1,34 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:module_18_assignment/data/model/login_model.dart';
-import 'package:module_18_assignment/data/model/network_response.dart';
-import 'package:module_18_assignment/data/network_caller/network_caller.dart';
-import 'package:module_18_assignment/data/utilities/urls.dart';
+import 'package:get/get.dart';
 import 'package:module_18_assignment/ui/controllers/auth_controller.dart';
 import 'package:module_18_assignment/ui/screens/auth/email_verification_screen.dart';
 import 'package:module_18_assignment/ui/screens/auth/sign_up_screen.dart';
-import 'package:module_18_assignment/ui/screens/main_bottom_nav_screen.dart';
 import 'package:module_18_assignment/ui/utility/app_colors.dart';
 import 'package:module_18_assignment/ui/utility/app_constants.dart';
 import 'package:module_18_assignment/ui/utility/asset_paths.dart';
 import 'package:module_18_assignment/ui/widgets/background_widget.dart';
-import 'package:module_18_assignment/ui/widgets/snack_bar_message.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
+
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  _SignInScreenState createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _signInApiInProgress = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize AuthController
+    Get.put(AuthController());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,16 +84,20 @@ class _SignInScreenState extends State<SignInScreen> {
                         },
                       ),
                       const SizedBox(height: 16),
-                      Visibility(
-                        visible: _signInApiInProgress == false,
-                        replacement: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: _onTapNextButton,
-                          child: const Icon(Icons.arrow_circle_right_outlined),
-                        ),
-                      ),
+                      Obx(() {
+                        final authController = Get.find<AuthController>();
+                        return Visibility(
+                          visible: !authController.signInApiInProgress.value,
+                          replacement: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: _onTapNextButton,
+                            child:
+                                const Icon(Icons.arrow_circle_right_outlined),
+                          ),
+                        );
+                      }),
                       const SizedBox(height: 36),
                       Center(
                         child: Column(
@@ -134,87 +141,18 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void _onTapNextButton() {
     if (_formKey.currentState!.validate()) {
-      _signUp();
-    }
-  }
-
-  Future<void> _signUp() async {
-    _signInApiInProgress = true;
-    if (mounted) {
-      setState(() {});
-    }
-
-    Map<String, dynamic> requestData = {
-      'email': _emailTEController.text.trim(),
-      'password': _passwordTEController.text,
-    };
-
-    final NetworkResponse response =
-        await NetworkCaller.postRequest(Urls.login, body: requestData);
-    _signInApiInProgress = false;
-    if (mounted) {
-      setState(() {});
-    }
-    if (response.isSuccess) {
-      LoginModel loginModel = LoginModel.fromJson(response.responseData);
-      await AuthController.saveUserAccessToken(loginModel.token!);
-      await AuthController.saveUserData(loginModel.userModel!);
-
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainBottomNavScreen(),
-          ),
-        );
-      }
-    } else {
-      if (mounted) {
-        showSnackBarMessage(
-          context,
-          response.errorMessage ?? 'Email/password is not correct. Try again',
-        );
-      }
+      Get.find<AuthController>().signIn(
+        email: _emailTEController.text.trim(),
+        password: _passwordTEController.text.trim(),
+      );
     }
   }
 
   void _onTapSignUpButton() {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const SignUpScreen(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = 0.0;
-          const end = 1.0;
-          const curve = Curves.easeIn;
-
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          var opacityAnimation = animation.drive(tween);
-
-          return FadeTransition(
-            opacity: opacityAnimation,
-            child: child,
-          );
-        },
-      ),
-    );
+    Get.to(() => const SignUpScreen());
   }
-
-
 
   void _onTapForgotPasswordButton() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const EmailVerificationScreen(),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _emailTEController.dispose();
-    _passwordTEController.dispose();
-    super.dispose();
+    Get.to(() => const EmailVerificationScreen());
   }
 }
